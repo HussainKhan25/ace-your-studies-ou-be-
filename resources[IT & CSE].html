@@ -133,7 +133,7 @@
             box-shadow: 0 10px 30px rgba(168, 85, 247, 0.2);
             max-height: calc(100vh - 120px);
             overflow-y: auto;
-            min-width: 250px;
+            min-width: 280px;
         }
 
         .quick-nav-title {
@@ -189,27 +189,72 @@
             display: flex;
         }
 
-        .year-nav-btn {
+        .year-nav-item {
             background: rgba(255, 255, 255, 0.1);
-            color: #e5e7eb;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 0.6rem 0.8rem;
             border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .year-nav-btn {
+            width: 100%;
+            background: transparent;
+            color: #e5e7eb;
+            border: none;
+            padding: 0.6rem 0.8rem;
             cursor: pointer;
             transition: all 0.3s ease;
             font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .year-nav-btn:hover {
             background: rgba(168, 85, 247, 0.2);
-            border-color: rgba(168, 85, 247, 0.4);
             color: #ffffff;
         }
 
         .year-nav-btn.active {
             background: rgba(168, 85, 247, 0.3);
-            border-color: rgba(168, 85, 247, 0.6);
             color: #a855f7;
+        }
+
+        .semester-nav-list {
+            display: none;
+            flex-direction: column;
+            gap: 0.2rem;
+            padding: 0.5rem 0 0.5rem 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 0.3rem;
+        }
+
+        .semester-nav-list.show {
+            display: flex;
+        }
+
+        .semester-nav-btn {
+            background: rgba(255, 255, 255, 0.05);
+            color: #d1d5db;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 0.7rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+
+        .semester-nav-btn:hover {
+            background: rgba(168, 85, 247, 0.15);
+            border-color: rgba(168, 85, 247, 0.3);
+            color: #e5e7eb;
+        }
+
+        .semester-nav-btn.active {
+            background: rgba(168, 85, 247, 0.25);
+            border-color: rgba(168, 85, 247, 0.5);
+            color: #fbbf24;
         }
 
         .quick-nav-toggle {
@@ -359,6 +404,7 @@
             padding: 1.2rem;
             border: 1px solid rgba(255, 255, 255, 0.15);
             transition: all 0.3s ease;
+            scroll-margin-top: 140px;
         }
 
         .semester-card:hover {
@@ -537,6 +583,7 @@
                 right: 20px;
                 left: 20px;
                 top: 150px;
+                min-width: auto;
             }
 
             .quick-nav-panel.show {
@@ -705,9 +752,41 @@
                 <span>▼</span>
             </button>
             <div class="year-nav-list" id="itYearList">
-                <button class="year-nav-btn" data-target="it-2nd-year">2nd Year</button>
-                <button class="year-nav-btn" data-target="it-3rd-year">3rd Year</button>
-                <button class="year-nav-btn" data-target="it-4th-year">4th Year</button>
+                <!-- 2nd Year IT -->
+                <div class="year-nav-item">
+                    <button class="year-nav-btn" data-year="it-2nd">
+                        2nd Year
+                        <span>▼</span>
+                    </button>
+                    <div class="semester-nav-list" data-year="it-2nd">
+                        <button class="semester-nav-btn" data-target="it-2nd-3rd-sem">3rd Semester</button>
+                        <button class="semester-nav-btn" data-target="it-2nd-4th-sem">4th Semester</button>
+                    </div>
+                </div>
+                
+                <!-- 3rd Year IT -->
+                <div class="year-nav-item">
+                    <button class="year-nav-btn" data-year="it-3rd">
+                        3rd Year
+                        <span>▼</span>
+                    </button>
+                    <div class="semester-nav-list" data-year="it-3rd">
+                        <button class="semester-nav-btn" data-target="it-3rd-5th-sem">5th Semester</button>
+                        <button class="semester-nav-btn" data-target="it-3rd-6th-sem">6th Semester</button>
+                    </div>
+                </div>
+                
+                <!-- 4th Year IT -->
+                <div class="year-nav-item">
+                    <button class="year-nav-btn" data-year="it-4th">
+                        4th Year
+                        <span>▼</span>
+                    </button>
+                    <div class="semester-nav-list" data-year="it-4th">
+                        <button class="semester-nav-btn" data-target="it-4th-7th-sem">7th Semester</button>
+                        <button class="semester-nav-btn" data-target="it-4th-8th-sem">8th Semester</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -718,9 +797,41 @@
                 <span>▼</span>
             </button>
             <div class="year-nav-list" id="cseYearList">
-                <button class="year-nav-btn" data-target="cse-2nd-year">2nd Year</button>
-                <button class="year-nav-btn" data-target="cse-3rd-year">3rd Year</button>
-                <button class="year-nav-btn" data-target="cse-4th-year">4th Year</button>
+                <!-- 2nd Year CSE -->
+                <div class="year-nav-item">
+                    <button class="year-nav-btn" data-year="cse-2nd">
+                        2nd Year
+                        <span>▼</span>
+                    </button>
+                    <div class="semester-nav-list" data-year="cse-2nd">
+                        <button class="semester-nav-btn" data-target="cse-2nd-3rd-sem">3rd Semester</button>
+                        <button class="semester-nav-btn" data-target="cse-2nd-4th-sem">4th Semester</button>
+                    </div>
+                </div>
+                
+                <!-- 3rd Year CSE -->
+                <div class="year-nav-item">
+                    <button class="year-nav-btn" data-year="cse-3rd">
+                        3rd Year
+                        <span>▼</span>
+                    </button>
+                    <div class="semester-nav-list" data-year="cse-3rd">
+                        <button class="semester-nav-btn" data-target="cse-3rd-5th-sem">5th Semester</button>
+                        <button class="semester-nav-btn" data-target="cse-3rd-6th-sem">6th Semester</button>
+                    </div>
+                </div>
+                
+                <!-- 4th Year CSE -->
+                <div class="year-nav-item">
+                    <button class="year-nav-btn" data-year="cse-4th">
+                        4th Year
+                        <span>▼</span>
+                    </button>
+                    <div class="semester-nav-list" data-year="cse-4th">
+                        <button class="semester-nav-btn" data-target="cse-4th-7th-sem">7th Semester</button>
+                        <button class="semester-nav-btn" data-target="cse-4th-8th-sem">8th Semester</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -743,7 +854,7 @@
                 <h3 class="year-title">2nd Year</h3>
                 <div class="semesters-grid">
                     <!-- 3rd Semester -->
-                    <div class="semester-card">
+                    <div class="semester-card" id="it-2nd-3rd-sem">
                         <h4 class="semester-title">3rd Semester</h4>
                         <div class="subjects-list">
                             <div class="subject-item">
@@ -795,7 +906,7 @@
                     </div>
 
                     <!-- 4th Semester -->
-                    <div class="semester-card">
+                    <div class="semester-card" id="it-2nd-4th-sem">
                         <h4 class="semester-title">4th Semester</h4>
                         <div class="subjects-list">
                             <div class="subject-item">
@@ -853,7 +964,7 @@
                 <h3 class="year-title">3rd Year</h3>
                 <div class="semesters-grid">
                     <!-- 5th Semester -->
-                    <div class="semester-card">
+                    <div class="semester-card" id="it-3rd-5th-sem">
                         <h4 class="semester-title">5th Semester</h4>
                         <div class="subjects-list">
                             <div class="subject-item">
@@ -896,7 +1007,7 @@
                     </div>
 
                     <!-- 6th Semester -->
-                    <div class="semester-card">
+                    <div class="semester-card" id="it-3rd-6th-sem">
                         <h4 class="semester-title">6th Semester</h4>
                         <div class="subjects-list">
                             <div class="subject-item">
@@ -945,7 +1056,7 @@
                 <h3 class="year-title">4th Year</h3>
                 <div class="semesters-grid">
                     <!-- 7th Semester -->
-                    <div class="semester-card">
+                    <div class="semester-card" id="it-4th-7th-sem">
                         <h4 class="semester-title">7th Semester</h4>
                         <div class="subjects-list">
                             <div class="subject-item">
@@ -997,7 +1108,7 @@
                     </div>
 
                     <!-- 8th Semester -->
-                    <div class="semester-card">
+                    <div class="semester-card" id="it-4th-8th-sem">
                         <h4 class="semester-title">8th Semester</h4>
                         <div class="subjects-list">
                             <div class="subject-item">
@@ -1034,7 +1145,7 @@
                 <h3 class="year-title">2nd Year</h3>
                 <div class="semesters-grid">
                     <!-- 3rd Semester -->
-                    <div class="semester-card">
+                    <div class="semester-card" id="cse-2nd-3rd-sem">
                         <h4 class="semester-title">3rd Semester</h4>
                         <div class="subjects-list">
                             <div class="subject-item">
@@ -1086,7 +1197,7 @@
                     </div>
 
                     <!-- 4th Semester -->
-                    <div class="semester-card">
+                    <div class="semester-card" id="cse-2nd-4th-sem">
                         <h4 class="semester-title">4th Semester</h4>
                         <div class="subjects-list">
                             <div class="subject-item">
@@ -1144,7 +1255,7 @@
                 <h3 class="year-title">3rd Year</h3>
                 <div class="semesters-grid">
                     <!-- 5th Semester -->
-                    <div class="semester-card">
+                    <div class="semester-card" id="cse-3rd-5th-sem">
                         <h4 class="semester-title">5th Semester</h4>
                         <div class="subjects-list">
                             <div class="subject-item">
@@ -1187,7 +1298,7 @@
                     </div>
 
                     <!-- 6th Semester -->
-                    <div class="semester-card">
+                    <div class="semester-card" id="cse-3rd-6th-sem">
                         <h4 class="semester-title">6th Semester</h4>
                         <div class="subjects-list">
                             <div class="subject-item">
@@ -1236,7 +1347,7 @@
                 <h3 class="year-title">4th Year</h3>
                 <div class="semesters-grid">
                     <!-- 7th Semester -->
-                    <div class="semester-card">
+                    <div class="semester-card" id="cse-4th-7th-sem">
                         <h4 class="semester-title">7th Semester</h4>
                         <div class="subjects-list">
                             <div class="subject-item">
@@ -1279,7 +1390,7 @@
                     </div>
 
                     <!-- 8th Semester -->
-                    <div class="semester-card">
+                    <div class="semester-card" id="cse-4th-8th-sem">
                         <h4 class="semester-title">8th Semester</h4>
                         <div class="subjects-list">
                             <div class="subject-item">
@@ -1371,6 +1482,14 @@
                 cseYearList.classList.remove('show');
                 cseNavBtn.querySelector('span').innerHTML = '▼';
                 cseNavBtn.classList.remove('active');
+                // Close all CSE semester lists
+                cseYearList.querySelectorAll('.semester-nav-list').forEach(list => {
+                    list.classList.remove('show');
+                });
+                cseYearList.querySelectorAll('.year-nav-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.querySelector('span').innerHTML = '▼';
+                });
             }
             
             itNavBtn.classList.toggle('active');
@@ -1386,20 +1505,58 @@
                 itYearList.classList.remove('show');
                 itNavBtn.querySelector('span').innerHTML = '▼';
                 itNavBtn.classList.remove('active');
+                // Close all IT semester lists
+                itYearList.querySelectorAll('.semester-nav-list').forEach(list => {
+                    list.classList.remove('show');
+                });
+                itYearList.querySelectorAll('.year-nav-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.querySelector('span').innerHTML = '▼';
+                });
             }
             
             cseNavBtn.classList.toggle('active');
         });
 
-        // Year navigation buttons
+        // Year navigation buttons with semester dropdown
         document.querySelectorAll('.year-nav-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const yearData = btn.getAttribute('data-year');
+                const semesterList = document.querySelector(`.semester-nav-list[data-year="${yearData}"]`);
+                const arrow = btn.querySelector('span');
+                
+                if (semesterList) {
+                    // Toggle current semester list
+                    semesterList.classList.toggle('show');
+                    btn.classList.toggle('active');
+                    arrow.innerHTML = semesterList.classList.contains('show') ? '▲' : '▼';
+                    
+                    // Close other year's semester lists in the same department
+                    const parentYearList = btn.closest('.year-nav-list');
+                    parentYearList.querySelectorAll('.year-nav-btn').forEach(otherBtn => {
+                        if (otherBtn !== btn) {
+                            const otherYearData = otherBtn.getAttribute('data-year');
+                            const otherSemesterList = document.querySelector(`.semester-nav-list[data-year="${otherYearData}"]`);
+                            if (otherSemesterList) {
+                                otherSemesterList.classList.remove('show');
+                                otherBtn.classList.remove('active');
+                                otherBtn.querySelector('span').innerHTML = '▼';
+                            }
+                        }
+                    });
+                }
+            });
+        });
+
+        // Semester navigation buttons
+        document.querySelectorAll('.semester-nav-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const targetId = btn.getAttribute('data-target');
                 const targetElement = document.getElementById(targetId);
                 
                 if (targetElement) {
-                    // Remove active class from all year buttons
-                    document.querySelectorAll('.year-nav-btn').forEach(b => b.classList.remove('active'));
+                    // Remove active class from all semester buttons
+                    document.querySelectorAll('.semester-nav-btn').forEach(b => b.classList.remove('active'));
                     // Add active class to clicked button
                     btn.classList.add('active');
                     
@@ -1544,16 +1701,16 @@
         document.head.appendChild(style);
 
         // Auto-highlight current section in quick nav
-        const yearSections = document.querySelectorAll('.year-section');
-        const yearNavBtns = document.querySelectorAll('.year-nav-btn');
+        const semesterCards = document.querySelectorAll('.semester-card');
+        const semesterNavBtns = document.querySelectorAll('.semester-nav-btn');
 
         const sectionObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const sectionId = entry.target.id;
                     
-                    // Remove active class from all year nav buttons
-                    yearNavBtns.forEach(btn => btn.classList.remove('active'));
+                    // Remove active class from all semester nav buttons
+                    semesterNavBtns.forEach(btn => btn.classList.remove('active'));
                     
                     // Add active class to corresponding button
                     const correspondingBtn = document.querySelector(`[data-target="${sectionId}"]`);
@@ -1567,9 +1724,9 @@
             rootMargin: '-100px 0px -50% 0px'
         });
 
-        // Observe all year sections
-        yearSections.forEach(section => {
-            sectionObserver.observe(section);
+        // Observe all semester cards
+        semesterCards.forEach(card => {
+            sectionObserver.observe(card);
         });
 
         // Enhanced mobile swipe navigation
@@ -1597,18 +1754,18 @@
             // Only trigger if vertical swipe is more significant than horizontal
             if (verticalSwipe > horizontalSwipe && verticalSwipe > swipeThreshold) {
                 const swipeDirection = touchStartY - touchEndY;
-                const currentActive = document.querySelector('.year-nav-btn.active');
+                const currentActive = document.querySelector('.semester-nav-btn.active');
                 
                 if (currentActive) {
-                    const allYearBtns = Array.from(document.querySelectorAll('.year-nav-btn'));
-                    const currentIndex = allYearBtns.indexOf(currentActive);
+                    const allSemesterBtns = Array.from(document.querySelectorAll('.semester-nav-btn'));
+                    const currentIndex = allSemesterBtns.indexOf(currentActive);
                     
-                    if (swipeDirection > 0 && currentIndex < allYearBtns.length - 1) {
+                    if (swipeDirection > 0 && currentIndex < allSemesterBtns.length - 1) {
                         // Swipe up - next section
-                        allYearBtns[currentIndex + 1].click();
+                        allSemesterBtns[currentIndex + 1].click();
                     } else if (swipeDirection < 0 && currentIndex > 0) {
                         // Swipe down - previous section
-                        allYearBtns[currentIndex - 1].click();
+                        allSemesterBtns[currentIndex - 1].click();
                     }
                 }
             }
@@ -1656,10 +1813,90 @@
         }
 
         // Add vibration to navigation buttons
-        document.querySelectorAll('.year-nav-btn, .department-nav-btn, .quick-nav-toggle').forEach(btn => {
+        document.querySelectorAll('.semester-nav-btn, .year-nav-btn, .department-nav-btn, .quick-nav-toggle').forEach(btn => {
             addVibrationFeedback(btn);
         });
+
+        // Add breadcrumb-like navigation feedback
+        function updateNavigationState() {
+            const currentSemester = document.querySelector('.semester-nav-btn.active');
+            if (currentSemester) {
+                const targetId = currentSemester.getAttribute('data-target');
+                
+                // Extract department, year, and semester info from target ID
+                const parts = targetId.split('-');
+                const department = parts[0].toUpperCase();
+                const year = parts[1] + ' ' + parts[2];
+                const semester = parts[3] + ' ' + parts[4];
+                
+                // Update page title dynamically
+                document.title = `${department} - ${year} - ${semester} | AceYourStudies:OU [BE]`;
+            }
+        }
+
+        // Update navigation state when semester buttons are clicked
+        document.querySelectorAll('.semester-nav-btn').forEach(btn => {
+            btn.addEventListener('click', updateNavigationState);
+        });
+
+        // Add smooth reveal animation for semester cards
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0) scale(1)';
+                    }, index * 100);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -20px 0px'
+        });
+
+        // Apply reveal animation to semester cards
+        document.querySelectorAll('.semester-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px) scale(0.95)';
+            card.style.transition = 'all 0.5s ease';
+            revealObserver.observe(card);
+        });
+
+        // Add search functionality for quick navigation
+        function addQuickSearch() {
+            const searchContainer = document.createElement('div');
+            searchContainer.innerHTML = `
+                <input type="text" id="quickSearch" placeholder="Search subjects..." 
+                       style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; 
+                              background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+                              border-radius: 6px; color: white; font-size: 0.9rem;">
+            `;
+            
+            const quickNavTitle = document.querySelector('.quick-nav-title');
+            quickNavTitle.after(searchContainer);
+            
+            const searchInput = document.getElementById('quickSearch');
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const allSemesterBtns = document.querySelectorAll('.semester-nav-btn');
+                
+                allSemesterBtns.forEach(btn => {
+                    const targetId = btn.getAttribute('data-target');
+                    const targetElement = document.getElementById(targetId);
+                    const subjects = targetElement ? targetElement.querySelectorAll('.subject-name') : [];
+                    
+                    let hasMatch = false;
+                    subjects.forEach(subject => {
+                        if (subject.textContent.toLowerCase().includes(searchTerm)) {
+                            hasMatch = true;
+                        }
+                    });
+                    
+                    btn.style.display = hasMatch || searchTerm === '' ? 'block' : 'none';
+                });
+            });
+        }
+        
     </script>
 </body>
 </html>
-                                
