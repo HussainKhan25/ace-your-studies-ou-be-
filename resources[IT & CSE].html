@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resources - AceYourStudies:OU [BE]</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #1a0033 0%, #2d1b4e 25%, #1a0033 50%, #4c1d95 75%, #1a0033 100%);
+            color: #FFFFFF;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Cosmic Background */
+        .cosmic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .cosmic-star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: linear-gradient(45deg, #a855f7, #e879f9, #fbbf24);
+            border-radius: 50%;
+            animation: cosmicTwinkle 4s infinite;
+        }
+
+        @keyframes cosmicTwinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            25% { opacity: 0.8; transform: scale(1.3); }
+            50% { opacity: 1; transform: scale(1.5); }
+            75% { opacity: 0.6; transform: scale(1.2); }
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: rgba(26, 0, 51, 0.95);
+            backdrop-filter: blur(15px);
+            z-index: 100;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #a855f7;
+            text-decoration: none;
+            text-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
+            z-index: 101;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a {
+            color: #FFFFFF;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #a855f7;
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+        }
+
+        .nav-toggle {
+            display: none;
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 101;
+        }
+
+        .nav-toggle:hover {
+            background: linear-gradient(135deg, #6d28d9, #7c3aed);
+            transform: scale(1.05);
+        }
+
+        /* Main Container */
+        .main-container {
+            min-height: 100vh;
+            padding: 6rem 2rem 2rem;
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header-section {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .main-heading {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #a855f7;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 20px rgba(168, 85, 247, 0.3); }
+            to { text-shadow: 0 0 30px rgba(168, 85, 247, 0.6); }
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: #e5e7eb;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        /* Navigation Arrows for Mobile */
+        .mobile-nav-arrows {
+            display: none;
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 90;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .nav-arrow {
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-arrow:hover {
+            background: linear-gradient(135deg, #6d28d9, #7c3aed);
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+        }
+
+        .nav-arrow:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+
+        /* Department Grid */
+        .departments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .department-card {
+            background: linear-gradient(145deg, rgba(124, 58, 237, 0.1), rgba(139, 92, 246, 0.1));
+            border: 2px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            scroll-margin-top: 100px;
+        }
+
+        .department-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #a855f7, #e879f9, #fbbf24);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .department-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(168, 85, 247, 0.3);
+            border-color: rgba(168, 85, 247, 0.6);
+        }
+
+        .department-title {
+            font-size: 1.4rem;
+            color: #a855f7;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
+        }
+
+        .years-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .year-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .year-title {
+            font-size: 1.3rem;
+            color: #fbbf24;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-align: center;
+            border-bottom: 2px solid rgba(251, 191, 36, 0.3);
+            padding-bottom: 0.5rem;
+        }
+
+        .semesters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .semester-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 1.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .semester-card:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .semester-title {
+            font-size: 1.1rem;
+            color: #e879f9;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .subjects-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .subject-item {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .subject-item:hover {
+            background: rgba(168, 85, 247, 0.1);
+            border-color: rgba(168, 85, 247, 0.4);
+        }
+
+        .subject-name {
+            font-size: 0.95rem;
+            color: #f3f4f6;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Updated Purple Action Buttons */
+        .action-btn {
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            min-width: 65px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(124, 58, 237, 0.2);
+        }
+
+        .action-btn:hover {
+            background: linear-gradient(135deg, #6d28d9, #7c3aed);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+        }
+
+        .action-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
+        }
+
+        /* Different shades of purple for variety */
+        .action-btn:nth-child(1) { 
+            background: linear-gradient(135deg, #8b5cf6, #a855f7); 
+        }
+        .action-btn:nth-child(2) { 
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6); 
+        }
+        .action-btn:nth-child(3) { 
+            background: linear-gradient(135deg, #6d28d9, #7c3aed); 
+        }
+        .action-btn:nth-child(4) { 
+            background: linear-gradient(135deg, #5b21b6, #6d28d9); 
+        }
+
+        .action-btn:nth-child(1):hover { 
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6); 
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+        .action-btn:nth-child(2):hover { 
+            background: linear-gradient(135deg, #6d28d9, #7c3aed); 
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+        }
+        .action-btn:nth-child(3):hover { 
+            background: linear-gradient(135deg, #5b21b6, #6d28d9); 
+            box-shadow: 0 4px 15px rgba(109, 40, 217, 0.4);
+        }
+        .action-btn:nth-child(4):hover { 
+            background: linear-gradient(135deg, #4c1d95, #5b21b6); 
+            box-shadow: 0 4px 15px rgba(91, 33, 182, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .departments-grid {
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            }
+            
+            .semesters-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                padding: 1rem;
+            }
+
+            .nav-container {
+                flex-wrap: wrap;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(26, 0, 51, 0.98);
+                backdrop-filter: blur(15px);
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1rem;
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+                border-bottom: 1px solid rgba(168, 85, 247, 0.3);
+            }
+
+            .nav-links.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .nav-links a {
+                font-size: 1rem;
+                padding: 0.5rem;
+                text-align: center;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+            }
+
+            .nav-links a:hover {
+                background: rgba(168, 85, 247, 0.2);
+            }
+
+            .nav-toggle {
+                display: block;
+            }
+
+            .mobile-nav-arrows {
+                display: flex;
+            }
+
+            .main-container {
+                padding: 8rem 1rem 2rem;
+            }
+
+            .main-heading {
+                font-size: 2.5rem;
+                line-height: 1.2;
+            }
+
+            .tagline {
+                font-size: 1rem;
+            }
+
+            .departments-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .department-card {
+                padding: 1.5rem;
+            }
+
+            .department-title {
+                font-size: 1.5rem;
+            }
+
+            .year-section {
+                padding: 1rem;
+            }
+
+            .semester-card {
+                padding: 1rem;
+            }
+
+            .button-group {
+                gap: 0.3rem;
+            }
+
+            .action-btn {
+                padding: 0.35rem 0.6rem;
+                font-size: 0.75rem;
+                min-width: 55px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-container {
+                padding: 8rem 0.5rem 2rem;
+            }
+
+            .main-heading {
+                font-size: 2rem;
+            }
+
+            .department-card {
+                padding: 1rem;
+                margin: 0 0.5rem;
+            }
+
+            .year-section {
+                padding: 0.8rem;
+            }
+
+            .semester-card {
+                padding: 0.8rem;
+            }
+
+            .subject-item {
+                padding: 0.8rem;
+            }
+
+            .subject-name {
+                font-size: 0.9rem;
+            }
+
+            .button-group {
+                justify-content: space-between;
+            }
+
+            .action-btn {
+                flex: 1;
+                min-width: auto;
+                padding: 0.3rem 0.4rem;
+                font-size: 0.7rem;
+            }
+
+            .nav-arrow {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .mobile-nav-arrows {
+                right: 10px;
+            }
+
+            .nav-arrow {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cosmic Background -->
+    <div class="cosmic-bg" id="cosmicBg"></div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#" class="logo">AceYourStudies:OU [BE]</a>
+            <button class="nav-toggle" id="navToggle">☰</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="resources[IT & CSE].html" class="active">Resources - IT & CSE</a></li>
+                <li><a href="team.html">Team</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation Arrows -->
+    <div class="mobile-nav-arrows" id="mobileNavArrows">
+        <button class="nav-arrow" id="navUp" title="Go to IT Department">↑</button>
+        <button class="nav-arrow" id="navDown" title="Go to CSE Department">↓</button>
+    </div>
+
+    <div class="main-container">
+        <!-- Header -->
+        <div class="header-section">
+            <h1 class="main-heading">IT & CSE Subjects & Resources</h1>
+            <p class="tagline">Complete collection of Notes, Questions, Playlists & Syllabus. Note: <b>Please scroll down for CSE resources for mobile users!</b></p>
+        </div>
+
+        <!-- Departments Grid -->
+        <div class="departments-grid">
+            <!-- IT Department -->
+            <div class="department-card" id="it-department">
+                <h2 class="department-title">Information Technology (IT)</h2>
+                <div class="years-container">
+                    <!-- 2nd Year -->
+                    <div class="year-section">
+                        <h3 class="year-title">2nd Year</h3>
+                        <div class="semesters-grid">
+                            <!-- 3rd Semester -->
+                            <div class="semester-card">
+                                <h4 class="semester-title">3rd Semester</h4>
+                                <div class="subjects-list">
+                                    <div class="subject-item">
+                                        <div class="subject-name">Mathematical Foundation of Information Technology</div>
+                                        <div class="button-group">
+                                            <a href="https://drive.google.com/file/d/1QX1cuuKF7XD8a-hAcuU9CJY8pMrYlxyy/view?usp=drivesdk" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="https://youtube.com/playlist?list=PLsJ7QOVZWO_a4hAv2tblLVzw8pKRWLzZo&feature=shared" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Finance and Accounting</div>
+                                        <div class="button-group">
+                                            <a href="https://drive.google.com/drive/folders/19xcH6857qpEKah6692qEKbB8uPdOvajF" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="https://youtube.com/playlist?list=PLsJ7QOVZWO_YvNykMbFfpRV-5xPrrl3iF&feature=shared" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Data Structures</div>
+                                        <div class="button-group">
+                                            <a href="https://drive.google.com/drive/folders/1HekUlCMvJFZl3x3H_bgqmzrCQftYK9DW" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="https://youtube.com/playlist?list=PL5Rc9H5eTGY46HAzmNeHbrE5r9LTf_rNB" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Digital Electronics</div>
+                                        <div class="button-group">
+                                            <a href="https://drive.google.com/file/d/1QSAE1g83m_dKpp0TxbhBJ19af93et1yt/view?usp=drivesdk" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="https://youtube.com/playlist?list=PLsJ7QOVZWO_YBp25466icISRGQssu_eKm&si=UEfpcNpKlkcOg8s9" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Mathematics - III</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Effective Technical Communication of English</div>
+                                        <div class="button-group">
+                                            <a href="https://drive.google.com/file/d/16kJgpmLHBuR1ATaY6ngl8nkPhL6ny6z0/view?usp=drivesdk" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Basic Electronics</div>
+                                        <div class="button-group">
+                                            <a href="https://drive.google.com/drive/folders/1Fb2g3d2ffhez-Y432KMO3iEwnmhVN6Bw" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            
+                            <!-- 4th Semester -->
+                            <div class="semester-card">
+                                <h4 class="semester-title">4th Semester</h4>
+                                <div class="subjects-list">
+                                    <div class="subject-item">
+                                        <div class="subject-name">Operation Research</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Signals and Systems</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">JAVA Programming</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Database Systems</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Computer Organization and Microprocessor</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Data Communication</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3rd Year -->
+                    <div class="year-section">
+                        <h3 class="year-title">3rd Year</h3>
+                        <div class="semesters-grid">
+                            <!-- 5th Semester -->
+                            <div class="semester-card">
+                                <h4 class="semester-title">5th Semester</h4>
+                                <div class="subjects-list">
+                                    <div class="subject-item">
+                                        <div class="subject-name">Automata Theory</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Operating Systems</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Artificial Intelligence</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Computer Networks</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Software Engineering</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">OOAD</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 6th Semester -->
+                            <div class="semester-card">
+                                <h4 class="semester-title">6th Semester</h4>
+                                <div class="subjects-list">
+                                    <div class="subject-item">
+                                        <div class="subject-name">Embedded System</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Design and Analysis of Algorithms</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Machine Learning</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Network Security and Cryptography</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Cloud Computing</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Soft and Interpersonal Skills</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4th Year -->
+                    <div class="year-section">
+                        <h3 class="year-title">4th Year</h3>
+                        <div class="semesters-grid">
+                            <!-- 7th Semester -->
+                            <div class="semester-card">
+                                <h4 class="semester-title">7th Semester</h4>
+                                <div class="subjects-list">
+                                    <div class="subject-item">
+                                        <div class="subject-name">Internet of Things</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Big Data Analytics</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Cyber Security</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Software Project Management</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Principles of Green Building</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 8th Semester -->
+                            <div class="semester-card">
+                                <h4 class="semester-title">8th Semester</h4>
+                                <div class="subjects-list">
+                                    <div class="subject-item">
+                                        <div class="subject-name">Information Security</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Essential of Road Safety Engineering</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CSE Department -->
+            <div class="department-card" id="cse-department">
+                <h2 class="department-title">Computer Science & Engineering (CSE)</h2>
+                <div class="years-container">
+                    <!-- 2nd Year -->
+                    <div class="year-section">
+                        <h3 class="year-title">2nd Year</h3>
+                        <div class="semesters-grid">
+                            <!-- 3rd Semester -->
+                            <div class="semester-card">
+                                <h4 class="semester-title">3rd Semester</h4>
+                                <div class="subjects-list">
+                                    <div class="subject-item">
+                                        <div class="subject-name">Operation Research</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Basic Electronics</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Digital Electronics</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Data Structures and Algorithms</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Discrete Mathematics</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">OOP using JAVA</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 4th Semester -->
+                            <div class="semester-card">
+                                <h4 class="semester-title">4th Semester</h4>
+                                <div class="subjects-list">
+                                    <div class="subject-item">
+                                        <div class="subject-name">Effective Technical Communication in English</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Finance and Accounting</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Database Management Systems</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Signal and System</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Mathematics - III</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Computer Organization</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Operating Systems</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3rd Year -->
+                    <div class="year-section">
+                        <h3 class="year-title">3rd Year</h3>
+                        <div class="semesters-grid">
+                            <!-- 5th Semester -->
+                            <div class="semester-card">
+                                <h4 class="semester-title">5th Semester</h4>
+                                <div class="subjects-list">
+                                    <div class="subject-item">
+                                        <div class="subject-name">Software Engineering</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Artificial Intelligence</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Principles of Programming Languages</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Computer Networks</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Automata Languages and Computations</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Object Oriented Analysis and Design</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 6th Semester -->
+                            <div class="semester-card">
+                                <h4 class="semester-title">6th Semester</h4>
+                                <div class="subjects-list">
+                                    <div class="subject-item">
+                                        <div class="subject-name">Compiler Design</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Design and Analysis of Algorithms</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Machine Learning</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Cryptography and Network Security</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Data Mining</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Soft and Interpersonal Skills</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4th Year -->
+                    <div class="year-section">
+                        <h3 class="year-title">4th Year</h3>
+                        <div class="semesters-grid">
+                            <!-- 7th Semester -->
+                            <div class="semester-card">
+                                <h4 class="semester-title">7th Semester</h4>
+                                <div class="subjects-list">
+                                    <div class="subject-item">
+                                        <div class="subject-name">Distributed System</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Information Retrieval System</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Information Security</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Principles of Green Building</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Entrepreneurship</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 8th Semester -->
+                            <div class="semester-card">
+                                <h4 class="semester-title">8th Semester</h4>
+                                <div class="subjects-list">
+                                    <div class="subject-item">
+                                        <div class="subject-name">Intellectual Property Rights</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                    <div class="subject-item">
+                                        <div class="subject-name">Essential of Road Safety Engineering</div>
+                                        <div class="button-group">
+                                            <a href="#" class="action-btn">Notes</a>
+                                            <a href="#" class="action-btn">Questions</a>
+                                            <a href="#" class="action-btn">Playlist</a>
+                                            <a href="#" class="action-btn">Syllabus</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create cosmic background stars
+        function createCosmicStars() {
+            const cosmicBg = document.getElementById('cosmicBg');
+            const numStars = 100;
+
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'cosmic-star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 4 + 's';
+                cosmicBg.appendChild(star);
+            }
+        }
+
+        // Initialize cosmic background
+        createCosmicStars();
+
+        // Mobile Navigation Toggle
+        const navToggle = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        navToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            navToggle.innerHTML = navLinks.classList.contains('active') ? '✕' : '☰';
+        });
+
+        // Close navigation when clicking on a link
+        navLinks.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A') {
+                navLinks.classList.remove('active');
+                navToggle.innerHTML = '☰';
+            }
+        });
+
+        // Department Navigation Arrows
+        const navUp = document.getElementById('navUp');
+        const navDown = document.getElementById('navDown');
+        const itDepartment = document.getElementById('it-department');
+        const cseDepartment = document.getElementById('cse-department');
+
+        let currentDepartment = 0; // 0 = IT, 1 = CSE
+
+        function updateArrowStates() {
+            navUp.disabled = currentDepartment === 0;
+            navDown.disabled = currentDepartment === 1;
+        }
+
+        function scrollToDepartment(department) {
+            const element = department === 0 ? itDepartment : cseDepartment;
+            element.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+            currentDepartment = department;
+            updateArrowStates();
+        }
+
+        navUp.addEventListener('click', () => {
+            if (currentDepartment > 0) {
+                scrollToDepartment(currentDepartment - 1);
+            }
+        });
+
+        navDown.addEventListener('click', () => {
+            if (currentDepartment < 1) {
+                scrollToDepartment(currentDepartment + 1);
+            }
+        });
+
+        // Initialize arrow states
+        updateArrowStates();
+
+        // Detect current department based on scroll position
+        function detectCurrentDepartment() {
+            const itRect = itDepartment.getBoundingClientRect();
+            const cseRect = cseDepartment.getBoundingClientRect();
+            const viewport = window.innerHeight / 2;
+
+            if (itRect.top <= viewport && itRect.bottom >= viewport) {
+                currentDepartment = 0;
+            } else if (cseRect.top <= viewport && cseRect.bottom >= viewport) {
+                currentDepartment = 1;
+            }
+            updateArrowStates();
+        }
+
+        // Update arrow states on scroll
+        window.addEventListener('scroll', detectCurrentDepartment);
+
+        // Show/hide mobile arrows based on screen size
+        function updateMobileArrows() {
+            const mobileArrows = document.getElementById('mobileNavArrows');
+            if (window.innerWidth <= 768) {
+                mobileArrows.style.display = 'flex';
+            } else {
+                mobileArrows.style.display = 'none';
+            }
+        }
+
+        // Initialize and update on resize
+        updateMobileArrows();
+        window.addEventListener('resize', updateMobileArrows);
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add parallax effect to cosmic stars
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const stars = document.querySelectorAll('.cosmic-star');
+            
+            stars.forEach((star, index) => {
+                const speed = (index % 3 + 1) * 0.1;
+                star.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+
+        // Add intersection observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all department cards
+        document.querySelectorAll('.department-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
+
+        // Add hover effects for action buttons
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px) scale(1.05)';
+            });
+            
+            btn.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(-2px) scale(1)';
+            });
+        });
+
+        // Close mobile navigation when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navToggle.contains(e.target) && !navLinks.contains(e.target)) {
+                navLinks.classList.remove('active');
+                navToggle.innerHTML = '☰';
+            }
+        });
+
+        // Keyboard navigation for accessibility
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                navLinks.classList.remove('active');
+                navToggle.innerHTML = '☰';
+            }
+        });
+
+        // Touch swipe for mobile department navigation
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchStartY = e.changedTouches[0].screenY;
+        });
+
+        document.addEventListener('touchend', e => {
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const swipeDistance = touchStartY - touchEndY;
+            
+            if (Math.abs(swipeDistance) > swipeThreshold) {
+                if (swipeDistance > 0 && currentDepartment < 1) {
+                    // Swipe up - go to next department
+                    scrollToDepartment(currentDepartment + 1);
+                } else if (swipeDistance < 0 && currentDepartment > 0) {
+                    // Swipe down - go to previous department
+                    scrollToDepartment(currentDepartment - 1);
+                }
+            }
+        }
+
+        // Add visual feedback for button clicks
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                // Create ripple effect
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}px;
+                    top: ${y}px;
+                    background: rgba(255, 255, 255, 0.3);
+                    border-radius: 50%;
+                    transform: scale(0);
+                    animation: ripple 0.6s linear;
+                    pointer-events: none;
+                `;
+                
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Add CSS for ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Enhanced scroll detection for smoother department tracking
+        let ticking = false;
+        
+        function updateDepartmentTracking() {
+            detectCurrentDepartment();
+            ticking = false;
+        }
+        
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(updateDepartmentTracking);
+                ticking = true;
+            }
+        });
+
+        // Add loading animation for department cards
+        setTimeout(() => {
+            document.querySelectorAll('.department-card').forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        }, 500);
+    </script>
+</body>
+</html>
