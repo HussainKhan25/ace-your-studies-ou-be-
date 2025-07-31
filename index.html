@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AceYourStudies:OU [BE] - Learn • Grow • Inspire</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: #0D1B2A;
+            color: #FFFFFF;
+            overflow-x: hidden;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M14.5 4c-.8-.8-2.2-.8-3 0L2 13.5c-.5.5-.5 1.3 0 1.8L6.2 20c.5.5 1.3.5 1.8 0L22 6c.5-.5.5-1.3 0-1.8L17.8 0z"/></svg>') 12 12, auto;
+        }
+
+        /* Starry Background */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        .shooting-star {
+            position: absolute;
+            width: 4px;
+            height: 2px;
+            background: linear-gradient(45deg, #FFC107, transparent);
+            border-radius: 50%;
+            animation: shoot 4s linear infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes shoot {
+            0% { transform: translateX(-100px) translateY(100px); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateX(300px) translateY(-100px); opacity: 0; }
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0D1B2A 0%, #1a2332 50%, #0D1B2A 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1.5s ease-out;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-content {
+            text-align: center;
+            max-width: 90%;
+            padding: 2rem;
+        }
+
+        .typewriter {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(255, 193, 7, 0.3);
+            min-height: 3rem;
+        }
+
+        .typewriter-subtitle {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            color: #FFC107;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .student-connection {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: clamp(1rem, 3vw, 2rem);
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: glow 3s ease-in-out infinite alternate;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
+            to { box-shadow: 0 0 40px rgba(255, 255, 255, 0.3); }
+        }
+
+        .connection-text {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            color: #FFFFFF;
+            text-align: center;
+        }
+
+        .loading-progress {
+            width: min(300px, 80vw);
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            margin: 2rem auto;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #FFFFFF, #CCCCCC);
+            border-radius: 2px;
+            animation: loading 4s ease-in-out;
+            transform: translateX(-100%);
+        }
+
+        @keyframes loading {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(0%); }
+        }
+
+        .welcome-message {
+            font-size: clamp(0.9rem, 1.8vw, 1rem);
+            color: #FFFFFF;
+            margin-top: 1rem;
+            font-style: italic;
+            text-align: center;
+        }
+
+        /* Updated Navigation - Same as Team Page */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: rgba(13, 27, 42, 0.95);
+            backdrop-filter: blur(15px);
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 193, 7, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #FFC107;
+            text-decoration: none;
+            text-shadow: 0 0 15px rgba(255, 193, 7, 0.5);
+            z-index: 101;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a {
+            color: #FFFFFF;
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #FFC107;
+            text-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+        }
+
+        .nav-toggle {
+            display: none;
+            background: linear-gradient(135deg, #FFC107, #FFB300);
+            color: #0D1B2A;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 101;
+        }
+
+        .nav-toggle:hover {
+            background: linear-gradient(135deg, #FFB300, #FF8F00);
+            transform: scale(1.05);
+        }
+
+        /* Main Container */
+        .main-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 6rem 2rem 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Book Container - Same size as team.html */
+        .book-container {
+            perspective: 1500px;
+            margin-bottom: 2rem;
+        }
+
+        .book {
+            width: 1000px;
+            height: 700px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease;
+            max-width: 95vw;
+            background: linear-gradient(145deg, #1e3a8a, #1d4ed8, #2563eb);
+            border-radius: 15px;
+            box-shadow: 
+                0 0 50px rgba(37, 99, 235, 0.6),
+                0 25px 70px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            border: 3px solid #1e40af;
+            animation: bookGlow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes bookGlow {
+            from { 
+                box-shadow: 
+                    0 0 50px rgba(37, 99, 235, 0.6),
+                    0 25px 70px rgba(0, 0, 0, 0.4),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            }
+            to { 
+                box-shadow: 
+                    0 0 70px rgba(37, 99, 235, 0.8),
+                    0 25px 70px rgba(0, 0, 0, 0.4),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        .book.opening {
+            animation: bookOpen 2.5s ease-out;
+        }
+
+        @keyframes bookOpen {
+            0% { 
+                transform: rotateY(0deg) scale(0.7); 
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            }
+            30% { 
+                transform: rotateY(-15deg) scale(0.8); 
+                box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4);
+            }
+            60% { 
+                transform: rotateY(10deg) scale(0.9); 
+                box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5);
+            }
+            100% { 
+                transform: rotateY(0deg) scale(1); 
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            }
+        }
+
+        .page {
+            position: absolute;
+            width: calc(100% - 40px);
+            height: calc(100% - 40px);
+            top: 20px;
+            left: 20px;
+            background: #FFFFFF;
+            border-radius: 8px;
+            box-shadow: 
+                inset 0 0 0 2px #e5e7eb,
+                0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            opacity: 0;
+            transform: rotateY(-90deg);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            background-image: 
+                repeating-linear-gradient(
+                    transparent, 
+                    transparent 28px, 
+                    #f3f4f6 28px, 
+                    #f3f4f6 29px
+                );
+            background-size: 100% 29px;
+            background-position: 0 40px;
+        }
+
+        .page.active {
+            opacity: 1;
+            transform: rotateY(0deg);
+            z-index: 10;
+        }
+
+        .page.turning {
+            animation: pageTurn 0.8s ease-in-out;
+        }
+
+        @keyframes pageTurn {
+            0% { 
+                transform: rotateY(0deg); 
+                z-index: 15;
+            }
+            50% { 
+                transform: rotateY(-90deg); 
+                z-index: 15;
+            }
+            100% { 
+                transform: rotateY(-180deg); 
+                z-index: 5;
+            }
+        }
+
+        .page-content {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            padding: 2rem;
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+            overflow-y: auto;
+        }
+
+        .page-left, .page-right {
+            flex: 1;
+            padding: 1.5rem;
+            color: #1f2937;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .page-left {
+            border-right: 3px solid #e5e7eb;
+            padding-right: 2.5rem;
+            margin-right: 1rem;
+        }
+
+        .page-full {
+            width: 100%;
+            padding: 3rem 2rem;
+            color: #1f2937;
+            line-height: 1.8;
+            text-align: center;
+            font-size: 1.05rem;
+        }
+
+        .page h2 {
+            color: #111827;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .page h3 {
+            color: #374151;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .page p, .page ul {
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+            color: #1f2937;
+        }
+
+        .page ul {
+            padding-left: 2rem;
+        }
+
+        .page li {
+            margin-bottom: 0.8rem;
+            color: #1f2937;
+        }
+
+        .page a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .page a:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+
+        /* Page Navigation */
+        .page-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .page-dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .page-dot.active {
+            background: #FFC107;
+            box-shadow: 0 0 15px #FFC107;
+        }
+
+        .page-dot:hover {
+            background: rgba(255, 193, 7, 0.7);
+        }
+
+        /* Floating Words */
+        .floating-words {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .floating-word {
+            position: absolute;
+            color: #FFC107;
+            font-size: 1.2rem;
+            font-weight: 300;
+            opacity: 0.6;
+            text-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+            animation: float 15s linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10%, 90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) translateX(50px);
+                opacity: 0;
+            }
+        }
+
+        /* Engagement Elements */
+        .study-tip {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+            font-size: 0.9rem;
+            max-width: 300px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.5s ease;
+            cursor: pointer;
+            z-index: 50;
+        }
+
+        .study-tip.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .study-tip:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(37, 99, 235, 0.4);
+        }
+
+        .study-tip-header {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #e0e7ff;
+        }
+
+        .interactive-quote {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            color: #1f2937;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.5s ease;
+            z-index: 200;
+        }
+
+        .interactive-quote.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .quote-text {
+            font-size: 1.2rem;
+            font-style: italic;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .quote-author {
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .close-quote {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        /* Page interaction effects */
+        .page:hover {
+            box-shadow: 
+                inset 0 0 0 2px #e5e7eb,
+                0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .interactive-element {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            border: 2px solid #2563eb;
+            border-radius: 10px;
+            color: #1e40af;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 0.5rem 0;
+            font-size: 1rem;
+        }
+
+        .interactive-element:hover {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        /* Success celebration */
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #2563eb;
+            animation: confetti-fall 3s linear infinite;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Mobile Responsive - Same as Team Page */
+        @media (max-width: 768px) {
+            .nav {
+                padding: 1rem;
+            }
+
+            .nav-container {
+                flex-wrap: wrap;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(13, 27, 42, 0.98);
+                backdrop-filter: blur(15px);
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1rem;
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+                border-bottom: 1px solid rgba(255, 193, 7, 0.3);
+            }
+
+            .nav-links.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .nav-links a {
+                font-size: 1rem;
+                padding: 0.5rem;
+                text-align: center;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+            }
+
+            .nav-links a:hover {
+                background: rgba(255, 193, 7, 0.2);
+            }
+
+            .nav-toggle {
+                display: block;
+            }
+
+            .main-container {
+                padding: 8rem 1rem 2rem;
+            }
+
+            .book {
+                width: 95vw;
+                height: 70vh;
+                min-height: 500px;
+            }
+
+            .page-content {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1.5rem;
+            }
+
+            .page-left {
+                border-right: none;
+                border-bottom: 2px solid #e5e7eb;
+                padding-right: 1rem;
+                padding-bottom: 1rem;
+                margin-right: 0;
+            }
+
+            .page h2 {
+                font-size: 1.5rem;
+            }
+
+            .page p, .page ul, .page li {
+                font-size: 1rem;
+            }
+
+            .study-tip {
+                bottom: 10px;
+                right: 10px;
+                left: 10px;
+                max-width: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-container {
+                padding: 8rem 0.5rem 2rem;
+            }
+
+            .book {
+                height: 60vh;
+                min-height: 400px;
+            }
+
+            .page-content {
+                padding: 1rem;
+            }
+
+            .student-connection {
+                margin: 1rem 0;
+                padding: 1rem;
+            }
+        }
+
+        /* Landscape mobile */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .book {
+                height: 70vh;
+            }
+            
+            .main-container {
+                padding: 4rem 1rem 1rem;
+            }
+        }
+
+        .footer {
+    background: linear-gradient(135deg, #0D1B2A 0%, #1a2332 50%, #0D1B2A 100%);
+    color: #FFFFFF;
+    margin-top: 4rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #FFC107, transparent);
+}
+
+.footer-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 3rem 2rem 1rem;
+    position: relative;
+    z-index: 10;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 2rem;
+}
+
+.footer-left {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.footer-logo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #FFC107;
+    text-shadow: 0 0 15px rgba(255, 193, 7, 0.5);
+}
+
+.logo-subtitle {
+    font-size: 0.9rem;
+    color: #CCCCCC;
+    font-style: italic;
+}
+
+.footer-description {
+    color: #CCCCCC;
+    line-height: 1.6;
+    font-size: 1rem;
+    max-width: 400px;
+}
+
+.footer-right {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.footer-links h4,
+.footer-contact h4 {
+    color: #FFC107;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.footer-links ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.footer-links a,
+.footer-contact a {
+    color: #CCCCCC;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.footer-links a:hover,
+.footer-contact a:hover {
+    color: #FFC107;
+    text-shadow: 0 0 8px rgba(255, 193, 7, 0.4);
+    transform: translateX(5px);
+}
+
+.footer-contact p {
+    margin-bottom: 1rem;
+}
+
+.social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.social-link {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: fit-content;
+}
+
+.social-link:hover {
+    background: rgba(255, 193, 7, 0.2);
+    border-color: rgba(255, 193, 7, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1.5rem;
+    text-align: center;
+}
+
+.footer-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 193, 7, 0.3), transparent);
+    margin-bottom: 1.5rem;
+}
+
+.footer-credits {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.9rem;
+    color: #CCCCCC;
+}
+
+.developer-credit {
+    font-style: italic;
+}
+
+.developer-name {
+    color: #FFC107;
+    font-weight: 600;
+    text-shadow: 0 0 8px rgba(255, 193, 7, 0.3);
+    background: linear-gradient(45deg, #FFC107, #FFD700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: nameGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes nameGlow {
+    from { 
+        filter: drop-shadow(0 0 5px rgba(255, 193, 7, 0.5));
+    }
+    to { 
+        filter: drop-shadow(0 0 15px rgba(255, 193, 7, 0.8));
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .footer-container {
+        padding: 2rem 1rem 1rem;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+    }
+    
+    .footer-right {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .footer-credits {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    
+    .logo-text {
+        font-size: 1.3rem;
+    }
+    
+    .footer-description {
+        max-width: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-container {
+        padding: 1.5rem 0.5rem 1rem;
+    }
+    
+    .footer-content {
+        gap: 1.5rem;
+    }
+    
+    .logo-text {
+        font-size: 1.2rem;
+    }
+    
+    .footer-description,
+    .footer-links a,
+    .footer-contact a {
+        font-size: 0.9rem;
+    }
+}
+
+/* Add subtle animation to footer elements */
+.footer-links li,
+.social-link {
+    animation: fadeInUp 0.6s ease-out;
+    animation-fill-mode: both;
+}
+
+.footer-links li:nth-child(1) { animation-delay: 0.1s; }
+.footer-links li:nth-child(2) { animation-delay: 0.2s; }
+.footer-links li:nth-child(3) { animation-delay: 0.3s; }
+.footer-links li:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Add some decorative stars to footer */
+.footer::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 10%;
+    width: 3px;
+    height: 3px;
+    background: #FFC107;
+    border-radius: 50%;
+    box-shadow: 
+        -20px -10px 0 1px rgba(255, 193, 7, 0.3),
+        -40px 15px 0 0.5px rgba(255, 193, 7, 0.5),
+        20px -20px 0 0.8px rgba(255, 193, 7, 0.4),
+        40px 10px 0 0.3px rgba(255, 193, 7, 0.6);
+    animation: twinkle 4s ease-in-out infinite;
+    opacity: 0.7;
+}
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="typewriter" id="typewriter"></div>
+            <div class="typewriter-subtitle" id="typewriterSubtitle"></div>
+            
+            <div class="student-connection">
+                <div class="connection-text" id="connectionText">
+                    Your journey to academic resources excellence starts here...
+                </div>
+                
+                <div class="loading-progress">
+                    <div class="progress-bar"></div>
+                </div>
+                
+                <div class="welcome-message" id="welcomeMessage">
+                    Let's Begin, Shall we???...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Starry Background -->
+    <div class="stars" id="stars"></div>
+
+    <!-- Floating Words -->
+    <div class="floating-words" id="floatingWords"></div>
+
+    <!-- Updated Navigation - Same as Team Page -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#" class="logo">AceYourStudies:OU [BE]</a>
+            <button class="nav-toggle" id="navToggle">☰</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="resources[IT & CSE].html">Resources- IT & CSE</a></li>
+                <li><a href="resources[CSE AIDS & CSE AIML].html">Resources- CSE AIDS & CSE AIML</a></li>
+                <li><a href="resources[CSE DS & CSE IoT BC CS].html">Resources- CSE DS & CSE IoT BC CS</a></li>
+                <li><a href="quest.html">Study Quest</a></li>
+                <li><a href="team.html">Team</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Study Tip Popup -->
+    <div class="study-tip" id="studyTip">
+        <div class="study-tip-header">💡 Study Tip</div>
+        <div id="studyTipContent">Take a 5-minute break every 25 minutes of studying!</div>
+    </div>
+
+    <!-- Interactive Quote Modal -->
+    <div class="interactive-quote" id="quoteModal">
+        <button class="close-quote" onclick="closeQuote()">&times;</button>
+        <div class="quote-text" id="quoteText"></div>
+        <div class="quote-author" id="quoteAuthor"></div>
+    </div>
+
+    <!-- Celebration Container -->
+    <div class="celebration" id="celebration"></div>
+    
+    <div class="main-container">
+        <!-- Book Container -->
+        <div class="book-container">
+            <div class="book" id="book">
+                <!-- Page 1 -->
+                <div class="page active" id="page1">
+                    <div class="page-content">
+                        <div class="page-left">
+                            <h2>Welcome Student!</h2>
+                            <p>Your trusted book for notes, important questions, and playlists to help you excel in your studies and prepare effectively.</p>
+                            <p>Navigate through our comprehensive resources designed specifically for OU [BE] students to achieve academic excellence.</p>
+                        </div>
+                        <div class="page-right">
+                            <h2>Our Mission</h2>
+                            <ul>
+                                <li>Empower students with timely organized resources</li>
+                                <li>Make learning more structured and stress-free</li>
+                                <li>Foster knowledge sharing among peers</li>
+                                <li>Create a supportive academic community</li>
+                            </ul>
+                            <div style="margin-top: 1.5rem;">
+                                <a href="#" class="interactive-element" onclick="showMotivationalQuote()">✨ Get Daily Motivation</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Page 2 -->
+                <div class="page" id="page2">
+                    <div class="page-content">
+                        <div class="page-left">
+                            <h2>Our Vision</h2>
+                            <ul>
+                                <li>Build a thriving student community</li>
+                                <li>Promote collaborative learning and growth</li>
+                                <li>Bridge the gap between students and resources</li>
+                                <li>Create lasting academic partnerships</li>
+                            </ul>
+                            <p>We envision a future where every student has access to quality educational materials and a supportive learning environment.</p>
+                        </div>
+                        <div class="page-right">
+                            <h2>Connect with Us</h2>
+                            <p><strong>📧 Email:</strong><br>
+                            <a href="mailto:aceyourstudies.ou@gmail.com">aceyourstudies.ou@gmail.com</a></p>
+                            
+                            <p><strong>🔗 Stay Connected:</strong></p>
+                            <ul>
+                                <li><a href="#telegram" class="interactive-element">📱 Join Telegram Channel</a></li>
+                                <li><a href="#linkedin" class="interactive-element">💼 Follow on LinkedIn</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Page 3 -->
+                <div class="page" id="page3">
+                    <div class="page-content">
+                        <div class="page-full">
+                            <h2>Thank You</h2>
+                            <p style="font-size: 1.1rem; margin-bottom: 2rem;">
+                                For referring notes, important questions, and playlists.<br>
+                                All thanks to the faculty, seniors, students around the colleges,<br>
+                                MVSR community, OU notes, Academic Ally, blogs, and drives of the resources.
+                            </p>
+                            
+                            <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(255, 193, 7, 0.1); border-radius: 10px; border-left: 4px solid #FFC107;">
+                                <h3 style="color: #FFC107; margin-bottom: 1rem;">Special Recognition</h3>
+                                <p>We extend our heartfelt gratitude to all contributors who have made this platform possible. Your dedication to sharing knowledge and supporting fellow students is what makes our community strong.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Navigation -->
+        <div class="page-nav">
+            <div class="page-dot active" data-page="1"></div>
+            <div class="page-dot" data-page="2"></div>
+            <div class="page-dot" data-page="3"></div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentPage = 1;
+        const totalPages = 3;
+        let studyTipIndex = 0;
+        let quoteIndex = 0;
+        
+        // Study tips array
+        const studyTips = [
+            "Take a 5-minute break every 25 minutes of studying!",
+            "Review your notes within 24 hours to improve retention by 60%",
+            "Study in short, focused sessions rather than long marathons",
+            "Use active recall - test yourself instead of just re-reading",
+            "Create a dedicated study space free from distractions",
+            "Get 7-8 hours of sleep before important exams",
+            "Use the Feynman technique - explain concepts in simple terms"
+        ];
+        
+        // Motivational quotes array
+        const motivationalQuotes = [
+            {
+                text: "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+                author: "Winston Churchill"
+            },
+            {
+                text: "Education is the most powerful weapon which you can use to change the world.",
+                author: "Nelson Mandela"
+            },
+            {
+                text: "The beautiful thing about learning is that no one can take it away from you.",
+                author: "B.B. King"
+            },
+            {
+                text: "Success is where preparation and opportunity meet.",
+                author: "Bobby Unser"
+            },
+            {
+                text: "The expert in anything was once a beginner.",
+                author: "Helen Hayes"
+            }
+        ];
+        
+        // Show study tip
+        function showStudyTip() {
+            const studyTip = document.getElementById('studyTip');
+            const content = document.getElementById('studyTipContent');
+            
+            content.textContent = studyTips[studyTipIndex];
+            studyTipIndex = (studyTipIndex + 1) % studyTips.length;
+            
+            studyTip.classList.add('show');
+            
+            setTimeout(() => {
+                studyTip.classList.remove('show');
+            }, 5000);
+        }
+        
+        // Show motivational quote
+        function showMotivationalQuote() {
+            const modal = document.getElementById('quoteModal');
+            const text = document.getElementById('quoteText');
+            const author = document.getElementById('quoteAuthor');
+            
+            const quote = motivationalQuotes[quoteIndex];
+            text.textContent = quote.text;
+            author.textContent = `— ${quote.author}`;
+            quoteIndex = (quoteIndex + 1) % motivationalQuotes.length;
+            
+            modal.classList.add('show');
+            
+            // Create confetti effect
+            createConfetti();
+        }
+        
+        // Close quote modal
+        function closeQuote() {
+            document.getElementById('quoteModal').classList.remove('show');
+        }
+        
+        // Create confetti effect
+        function createConfetti() {
+            const celebration = document.getElementById('celebration');
+            const colors = ['#2563eb', '#1d4ed8', '#3b82f6', '#60a5fa'];
+            
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                    celebration.appendChild(confetti);
+                    
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 3000);
+                }, i * 50);
+            }
+        }
+        
+        // Create stars
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const numStars = window.innerWidth < 768 ? 100 : 200;
+            
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+            
+            // Create shooting stars
+            setInterval(() => {
+                if (Math.random() < 0.3) {
+                    const shootingStar = document.createElement('div');
+                    shootingStar.className = 'shooting-star';
+                    shootingStar.style.left = '0%';
+                    shootingStar.style.top = Math.random() * 50 + '%';
+                    starsContainer.appendChild(shootingStar);
+                    
+                    setTimeout(() => {
+                        shootingStar.remove();
+                    }, 4000);
+                }
+            }, 3000);
+        }
+
+        // Create floating words
+        function createFloatingWords() {
+            const words = [
+                "Never Give Up", "Stay Consistent", "You Got This", 
+                "Dream Big", "Trust the Process", "Push Through Challenges",
+                "Learn. Grow. Inspire.", "Excellence", "Knowledge", "Success"
+            ];
+            
+            const container = document.getElementById('floatingWords');
+            
+            setInterval(() => {
+                if (Math.random() < 0.4) {
+                    const word = document.createElement('div');
+                    word.className = 'floating-word';
+                    word.textContent = words[Math.floor(Math.random() * words.length)];
+                    word.style.left = Math.random() * 80 + '%';
+                    word.style.animationDuration = (12 + Math.random() * 8) + 's';
+                    container.appendChild(word);
+                    
+                    setTimeout(() => {
+                        word.remove();
+                    }, 20000);
+                }
+            }, 2000);
+        }
+
+        // Typewriter effect
+        function typeWriter(element, text, speed = 100) {
+            return new Promise((resolve) => {
+                let i = 0;
+                element.textContent = '';
+                
+                function type() {
+                    if (i < text.length) {
+                        element.textContent += text.charAt(i);
+                        i++;
+                        setTimeout(type, speed);
+                    } else {
+                        resolve();
+                    }
+                }
+                type();
+            });
+        }
+
+        // Initialize loading screen
+        async function initLoadingScreen() {
+            const typewriter = document.getElementById('typewriter');
+            const subtitle = document.getElementById('typewriterSubtitle');
+            const connectionText = document.getElementById('connectionText');
+            const welcomeMessage = document.getElementById('welcomeMessage');
+            
+            // Phase 1: Brand introduction
+            await typeWriter(typewriter, 'AceYourStudies:OU [BE]', 80);
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await typeWriter(subtitle, 'Learn • Grow • Inspire', 100);
+            
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Phase 2: Connection messages
+            const connectionMessages = [
+                "Connecting you to a community of dedicated learners...",
+                "Building bridges between students and success...",
+                "Your academic support network is loading...",
+                "Preparing your personalized study companion..."
+            ];
+            
+            let messageIndex = 0;
+            const messageInterval = setInterval(() => {
+                connectionText.style.opacity = '0';
+                setTimeout(() => {
+                    connectionText.textContent = connectionMessages[messageIndex];
+                    connectionText.style.opacity = '1';
+                    messageIndex = (messageIndex + 1) % connectionMessages.length;
+                }, 500);
+            }, 2500);
+            
+            // Phase 3: Welcome messages
+            setTimeout(async () => {
+                const welcomeMessages = [
+                    "Your journey to academic excellence starts here...",
+                    "Join thousands of students achieving their dreams...",
+                    "Together, we make learning extraordinary...",
+                    "Welcome to your success story!"
+                ];
+                
+                for (let i = 0; i < welcomeMessages.length; i++) {
+                    welcomeMessage.style.opacity = '0';
+                    await new Promise(resolve => setTimeout(resolve, 300));
+                    welcomeMessage.textContent = welcomeMessages[i];
+                    welcomeMessage.style.opacity = '1';
+                    await new Promise(resolve => setTimeout(resolve, 1200));
+                }
+            }, 2000);
+            
+            // Phase 4: Complete loading
+            setTimeout(() => {
+                clearInterval(messageInterval);
+                const loadingScreen = document.getElementById('loadingScreen');
+                loadingScreen.classList.add('hidden');
+                
+                setTimeout(() => {
+                    document.getElementById('book').classList.add('opening');
+                }, 500);
+            }, 6000);
+        }
+
+        // Page navigation
+        function showPage(pageNumber) {
+            const currentPageEl = document.getElementById(`page${currentPage}`);
+            const newPageEl = document.getElementById(`page${pageNumber}`);
+            const dots = document.querySelectorAll('.page-dot');
+            
+            // Add page turn animation
+            currentPageEl.classList.add('turning');
+            
+            setTimeout(() => {
+                currentPageEl.classList.remove('active', 'turning');
+                newPageEl.classList.add('active');
+                
+                // Update dots
+                dots.forEach(dot => dot.classList.remove('active'));
+                dots[pageNumber - 1].classList.add('active');
+                
+                currentPage = pageNumber;
+                
+                // Play page turn sound effect (visual feedback)
+                newPageEl.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    newPageEl.style.transform = 'scale(1)';
+                }, 200);
+                
+                // Show study tip on page 2
+                if (pageNumber === 2) {
+                    setTimeout(showStudyTip, 1000);
+                }
+            }, 400);
+        }
+
+        // Mobile Navigation Toggle - Same as Team Page
+        const navToggle = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        navToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            navToggle.innerHTML = navLinks.classList.contains('active') ? '✕' : '☰';
+        });
+
+        // Close navigation when clicking on a link
+        navLinks.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A') {
+                navLinks.classList.remove('active');
+                navToggle.innerHTML = '☰';
+            }
+        });
+
+        // Close mobile navigation when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navToggle.contains(e.target) && !navLinks.contains(e.target)) {
+                navLinks.classList.remove('active');
+                navToggle.innerHTML = '☰';
+            }
+        });
+
+        // Keyboard navigation for accessibility
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                navLinks.classList.remove('active');
+                navToggle.innerHTML = '☰';
+            }
+        });
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            createStars();
+            createFloatingWords();
+            initLoadingScreen();
+            
+            // Initialize engagement elements
+            setTimeout(() => {
+                showStudyTip();
+            }, 15000); // First tip after 15 seconds
+            
+            // Show periodic study tips
+            setInterval(showStudyTip, 45000); // Every 45 seconds
+            
+            // Page dot navigation
+            document.querySelectorAll('.page-dot').forEach(dot => {
+                dot.addEventListener('click', (e) => {
+                    const pageNumber = parseInt(e.target.dataset.page);
+                    if (pageNumber !== currentPage) {
+                        showPage(pageNumber);
+                    }
+                });
+            });
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft' && currentPage > 1) {
+                    showPage(currentPage - 1);
+                } else if (e.key === 'ArrowRight' && currentPage < totalPages) {
+                    showPage(currentPage + 1);
+                } else if (e.key === 'Escape') {
+                    closeQuote();
+                }
+            });
+            
+            // Touch navigation for mobile
+            let startX = 0;
+            let endX = 0;
+            
+            document.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+            });
+            
+            document.addEventListener('touchend', (e) => {
+                endX = e.changedTouches[0].clientX;
+                handleSwipe();
+            });
+            
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                const diffX = startX - endX;
+                
+                if (Math.abs(diffX) > swipeThreshold) {
+                    if (diffX > 0 && currentPage < totalPages) {
+                        // Swipe left - next page
+                        showPage(currentPage + 1);
+                    } else if (diffX < 0 && currentPage > 1) {
+                        // Swipe right - previous page
+                        showPage(currentPage - 1);
+                    }
+                }
+            }
+            
+            // Study tip click to dismiss
+            document.getElementById('studyTip').addEventListener('click', () => {
+                document.getElementById('studyTip').classList.remove('show');
+            });
+            
+            // Close quote modal when clicking outside
+            document.getElementById('quoteModal').addEventListener('click', (e) => {
+                if (e.target.id === 'quoteModal') {
+                    closeQuote();
+                }
+            });
+        });
+
+        // Enhanced scroll effects for navigation
+        let lastScrollY = window.scrollY;
+        
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('.nav');
+            const currentScrollY = window.scrollY;
+            
+            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                nav.style.transform = 'translateY(-100%)';
+            } else {
+                nav.style.transform = 'translateY(0)';
+            }
+            
+            lastScrollY = currentScrollY;
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Optimize performance for mobile
+        if (window.innerWidth < 768) {
+            // Reduce animation intensity on mobile for better performance
+            document.documentElement.style.setProperty('--animation-duration', '2s');
+        }
+
+        // Handle orientation change
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                // Recalculate layout after orientation change
+                window.location.reload();
+            }, 500);
+        });
+    </script>
+
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-content">
+            <div class="footer-left">
+                <div class="footer-logo">
+                    <span class="logo-text">AceYourStudies:OU [BE]</span>
+                    <span class="logo-subtitle">Learn • Grow • Inspire</span>
+                </div>
+                <p class="footer-description">
+                    Empowering OU [BE] students with comprehensive study resources, 
+                    notes, and academic support for excellence in education.
+                </p>
+            </div>
+            
+            <div class="footer-right">
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="resources[IT & CSE].html">Resources- IT & CSE</a></li>
+                        <li><a href="resources[CSE AIDS & CSE AIML].html">Resources- CSE AIDS & CSE AIML</a></li>
+                         <li><a href="resources[CSE DS & CSE IoT BC CS].html">Resources- CSE DS & CSE IoT BC CS</a></li>
+                        <li><a href="quest.html">Study Quest</a></li>
+                        <li><a href="team.html">Our Team</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-contact">
+                    <h4>Connect</h4>
+                    <p><a href="mailto:aceyourstudies.ou@gmail.com">aceyourstudies.ou@gmail.com</a></p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">Telegram</a>
+                        <a href="#" class="social-link">LinkedIn</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="footer-divider"></div>
+            <div class="footer-credits">
+                <p>&copy; 2025 AceYourStudies:OU [BE]. All rights reserved.</p>
+                <p class="developer-credit">
+                    Website Built & Designed by 
+                    <span class="developer-name">Mohammed Hussain Abid Khan</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
