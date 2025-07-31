@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Quest - Interactive Learning Game | AceYourStudies:OU [BE]</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-bg: #0A0A0F;
+            --secondary-bg: #1A1A2E;
+            --accent-bg: #16213E;
+            --card-bg: rgba(255, 255, 255, 0.02);
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --primary-text: #FFFFFF;
+            --secondary-text: #B8BCC8;
+            --accent-text: #64FFDA;
+            --success-color: #00E676;
+            --warning-color: #FFB74D;
+            --error-color: #FF5252;
+            --purple-glow: #BB86FC;
+            --blue-glow: #03DAC6;
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-danger: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --neon-shadow: 0 0 20px rgba(100, 255, 218, 0.3);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--primary-bg);
+            color: var(--primary-text);
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(120, 198, 119, 0.3) 0%, transparent 50%);
+            animation: backgroundShift 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(-20px) translateY(-10px); }
+            50% { transform: translateX(10px) translateY(-20px); }
+            75% { transform: translateX(-10px) translateY(10px); }
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--accent-text);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 100;
+            border-bottom: 1px solid rgba(100, 255, 218, 0.2);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent-text);
+            text-decoration: none;
+            text-shadow: 0 0 15px rgba(100, 255, 218, 0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--secondary-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent-text);
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-text);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Game Header */
+        .game-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .game-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-text), var(--purple-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .game-subtitle {
+            font-size: 1.2rem;
+            color: var(--secondary-text);
+            font-weight: 400;
+        }
+
+        /* Game Stats */
+        .game-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .stat-card:hover::before {
+            left: 100%;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--neon-shadow);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-text);
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--secondary-text);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Game Modes */
+        .game-modes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .game-mode {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-mode::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .game-mode:hover::before {
+            opacity: 0.1;
+        }
+
+        .game-mode:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(100, 255, 218, 0.2);
+            border-color: var(--accent-text);
+        }
+
+        .mode-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .mode-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--primary-text);
+            margin-bottom: 1rem;
+        }
+
+        .mode-description {
+            color: var(--secondary-text);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .mode-difficulty {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .difficulty-stars {
+            color: var(--warning-color);
+        }
+
+        .play-btn {
+            background: var(--gradient-success);
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .play-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.3s ease;
+        }
+
+        .play-btn:hover::before {
+            left: 100%;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(79, 172, 254, 0.4);
+        }
+
+        /* Quiz Game Interface */
+        .quiz-container {
+            display: none;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quiz-header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .quiz-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin: 0 1rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-success);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .question-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            color: var(--primary-text);
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(100, 255, 218, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .option:hover::before {
+            left: 100%;
+        }
+
+        .option:hover {
+            border-color: var(--accent-text);
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.2);
+        }
+
+        .option.selected {
+            border-color: var(--accent-text);
+            background: rgba(100, 255, 218, 0.1);
+        }
+
+        .option.correct {
+            border-color: var(--success-color);
+            background: rgba(0, 230, 118, 0.1);
+            animation: correctPulse 0.6s ease;
+        }
+
+        .option.incorrect {
+            border-color: var(--error-color);
+            background: rgba(255, 82, 82, 0.1);
+            animation: incorrectShake 0.6s ease;
+        }
+
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes incorrectShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* Results Screen */
+        .results-screen {
+            display: none;
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .results-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .score-display {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--accent-text);
+            margin-bottom: 1rem;
+        }
+
+        .score-label {
+            font-size: 1.2rem;
+            color: var(--secondary-text);
+            margin-bottom: 2rem;
+        }
+
+        .performance-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .performance-item {
+            padding: 1rem;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-success);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--primary-text);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 5rem 1rem 2rem;
+            }
+
+            .game-modes {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .question-card {
+                padding: 1.5rem;
+            }
+
+            .results-card {
+                padding: 2rem;
+            }
+
+            .performance-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--accent-text);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Celebration Effects */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: var(--accent-text);
+            pointer-events: none;
+            z-index: 1000;
+            animation: confetti-fall 3s linear infinite;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#" class="logo">Study Quest | AceYourStudies:OU [BE]</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="quest.html" class="active">Study Quest</a></li>
+                <li><a href="team.html">Team</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Main Menu -->
+        <div id="mainMenu">
+            <div class="game-header">
+                <h1 class="game-title">Study Quest</h1>
+                <p class="game-subtitle">Level up your knowledge through interactive challenges</p>
+            </div>
+
+            <!-- Game Stats -->
+            <div class="game-stats">
+                <div class="stat-card">
+                    <span class="stat-value" id="totalScore">0</span>
+                    <span class="stat-label">Total Score</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="gamesPlayed">0</span>
+                    <span class="stat-label">Games Played</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="accuracy">0%</span>
+                    <span class="stat-label">Accuracy</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="streak">0</span>
+                    <span class="stat-label">Win Streak</span>
+                </div>
+            </div>
+
+            <!-- Game Modes -->
+            <div class="game-modes">
+                <div class="game-mode" onclick="startQuiz('programming')">
+                    <span class="mode-icon">💻</span>
+                    <h3 class="mode-title">Programming Challenge</h3>
+                    <p class="mode-description">Test your coding knowledge with questions on algorithms, data structures, and programming concepts.</p>
+                    <div class="mode-difficulty">
+                        <span>Difficulty:</span>
+                        <span class="difficulty-stars">⭐⭐⭐</span>
+                    </div>
+                    <button class="play-btn">Start Challenge</button>
+                </div>
+
+                <div class="game-mode" onclick="startQuiz('mathematics')">
+                    <span class="mode-icon">🧮</span>
+                    <h3 class="mode-title">Math Mastery</h3>
+                    <p class="mode-description">Sharpen your mathematical skills with calculus, algebra, and discrete mathematics problems.</p>
+                    <div class="mode-difficulty">
+                        <span>Difficulty:</span>
+                        <span class="difficulty-stars">⭐⭐</span>
+                    </div>
+                    <button class="play-btn">Start Challenge</button>
+                </div>
+
+                <div class="game-mode" onclick="startQuiz('engineering')">
+                    <span class="mode-icon">⚙️</span>
+                    <h3 class="mode-title">Engineering Concepts</h3>
+                    <p class="mode-description">Challenge yourself with core engineering principles, circuits, and design concepts.</p>
+                    <div class="mode-difficulty">
+                        <span>Difficulty:</span>
+                        <span class="difficulty-stars">⭐⭐⭐⭐</span>
+                    </div>
+                    <button class="play-btn">Start Challenge</button>
+                </div>
+
+                <div class="game-mode" onclick="startQuiz('general')">
+                    <span class="mode-icon">🎯</span>
+                    <h3 class="mode-title">Quick Fire Round</h3>
+                    <p class="mode-description">Mixed questions from all subjects. Perfect for a quick brain workout!</p>
+                    <div class="mode-difficulty">
+                        <span>Difficulty:</span>
+                        <span class="difficulty-stars">⭐⭐</span>
+                    </div>
+                    <button class="play-btn">Start Challenge</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Interface -->
+        <div id="quizContainer" class="quiz-container">
+            <div class="quiz-header">
+                <div class="quiz-progress">
+                    <span id="questionCounter">1 / 10</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <span id="timer">30s</span>
+                </div>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <span id="currentCategory" style="color: var(--accent-text); font-weight: 600;"></span>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text" id="questionText"></div>
+                <div class="options-grid" id="optionsGrid"></div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="resultsScreen" class="results-screen">
+            <div class="results-card">
+                <div class="score-display" id="finalScore">0</div>
+                <div class="score-label">Your Score</div>
+                
+                <div class="performance-stats">
+                    <div class="performance-item">
+                        <div style="font-size: 1.5rem; color: var(--success-color);" id="correctAnswers">0</div>
+                        <div style="color: var(--secondary-text);">Correct</div>
+                    </div>
+                    <div class="performance-item">
+                        <div style="font-size: 1.5rem; color: var(--error-color);" id="incorrectAnswers">0</div>
+                        <div style="color: var(--secondary-text);">Incorrect</div>
+                    </div>
+                    <div class="performance-item">
+                        <div style="font-size: 1.5rem; color: var(--warning-color);" id="avgTime">0s</div>
+                        <div style="color: var(--secondary-text);">Avg Time</div>
+                    </div>
+                </div>
+
+                <div id="performanceMessage" style="margin-bottom: 2rem; font-size: 1.1rem;"></div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="restartQuiz()">Play Again</button>
+                    <button class="btn btn-secondary" onclick="goHome()">Main Menu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game State
+        let currentQuiz = null;
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let timeLeft = 30;
+        let timer = null;
+        let userAnswers = [];
+        let questionStartTime = 0;
+        let responseTimes = [];
+
+        // Game Statistics
+        let gameStats = {
+            totalScore: parseInt(localStorage.getItem('totalScore') || '0'),
+            gamesPlayed: parseInt(localStorage.getItem('gamesPlayed') || '0'),
+            totalCorrect: parseInt(localStorage.getItem('totalCorrect') || '0'),
+            totalQuestions: parseInt(localStorage.getItem('totalQuestions') || '0'),
+            streak: parseInt(localStorage.getItem('streak') || '0')
+        };
+
+        // Question Banks
+        const questionBanks = {
+            programming: [
+                {
+                    question: "What is the time complexity of binary search?",
+                    options: ["O(n)", "O(log n)", "O(n²)", "O(1)"],
+                    correct: 1
+                },
+                {
+                    question: "Which data structure uses LIFO principle?",
+                    options: ["Queue", "Stack", "Array", "Linked List"],
+                    correct: 1
+                },
+                {
+                    question: "What does OOP stand for?",
+                    options: ["Object Oriented Programming", "Only One Program", "Open Office Program", "Other Object Protocol"],
+                    correct: 0
+                },
+                {
+                    question: "Which sorting algorithm has the best average time complexity?",
+                    options: ["Bubble Sort", "Selection Sort", "Merge Sort", "Insertion Sort"],
+                    correct: 2
+                },
+                {
+                    question: "What is recursion?",
+                    options: ["A loop that never ends", "A function calling itself", "A type of array", "A sorting method"],
+                    correct: 1
+                },
+                {
+                    question: "Which of these is not a programming paradigm?",
+                    options: ["Functional", "Object-Oriented", "Procedural", "Circular"],
+                    correct: 3
+                },
+                {
+                    question: "What is the purpose of a constructor in OOP?",
+                    options: ["To destroy objects", "To initialize objects", "To copy objects", "To compare objects"],
+                    correct: 1
+                },
+                {
+                    question: "Which data structure is best for implementing a priority queue?",
+                    options: ["Array", "Linked List", "Heap", "Stack"],
+                    correct: 2
+                },
+                {
+                    question: "What is the space complexity of merge sort?",
+                    options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
+                    correct: 2
+                },
+                {
+                    question: "Which of these is a dynamic programming technique?",
+                    options: ["Divide and Conquer", "Greedy Algorithm", "Memoization", "Brute Force"],
+                    correct: 2
+                }
+            ],
+            mathematics: [
+                {
+                    question: "What is the derivative of x²?",
+                    options: ["x", "2x", "x²", "2"],
+                    correct: 1
+                },
+                {
+                    question: "What is the value of π (pi) approximately?",
+                    options: ["3.14159", "2.71828", "1.41421", "1.61803"],
+                    correct: 0
+                },
+                {
+                    question: "What is the integral of 1/x?",
+                    options: ["x", "ln(x)", "1/x²", "x²/2"],
+                    correct: 1
+                },
+                {
+                    question: "In a right triangle, what is sin²θ + cos²θ equal to?",
+                    options: ["0", "1", "θ", "2"],
+                    correct: 1
+                },
+                {
+                    question: "What is the factorial of 5?",
+                    options: ["25", "120", "5", "625"],
+                    correct: 1
+                },
+                {
+                    question: "What is the quadratic formula?",
+                    options: ["ax² + bx + c", "(-b ± √(b²-4ac))/2a", "a² + b² = c²", "y = mx + b"],
+                    correct: 1
+                },
+                {
+                    question: "What is the sum of angles in a triangle?",
+                    options: ["90°", "180°", "270°", "360°"],
+                    correct: 1
+                },
+                {
+                    question: "What is log₁₀(100)?",
+                    options: ["1", "2", "10", "100"],
+                    correct: 1
+                },
+                {
+                    question: "What is the slope of a line perpendicular to y = 2x + 3?",
+                    options: ["2", "-2", "1/2", "-1/2"],
+                    correct: 3
+                },
+                {
+                    question: "What is the area of a circle with radius 5?",
+                    options: ["10π", "25π", "5π", "50π"],
+                    correct: 1
+                }
+            ],
+            engineering: [
+                {
+                    question: "What is Ohm's Law?",
+                    options: ["V = I/R", "V = IR", "V = I + R", "V = I - R"],
+                    correct: 1
+                },
+                {
+                    question: "Which material is the best conductor of electricity?",
+                    options: ["Copper", "Silver", "Gold", "Aluminum"],
+                    correct: 1
+                },
+                {
+                    question: "What is the unit of electrical resistance?",
+                    options: ["Volt", "Ampere", "Ohm", "Watt"],
+                    correct: 2
+                },
+                {
+                    question: "In digital logic, what does AND gate output when both inputs are 1?",
+                    options: ["0", "1", "Undefined", "Error"],
+                    correct: 1
+                },
+                {
+                    question: "What is the first law of thermodynamics?",
+                    options: ["Energy cannot be created or destroyed", "Entropy always increases", "Heat flows from hot to cold", "Force equals mass times acceleration"],
+                    correct: 0
+                },
+                {
+                    question: "What is the SI unit of force?",
+                    options: ["Joule", "Newton", "Pascal", "Watt"],
+                    correct: 1
+                },
+                {
+                    question: "Which logic gate is equivalent to NOT AND?",
+                    options: ["OR", "XOR", "NAND", "NOR"],
+                    correct: 2
+                },
+                {
+                    question: "What is the speed of light in vacuum?",
+                    options: ["3 × 10⁸ m/s", "3 × 10⁶ m/s", "3 × 10¹⁰ m/s", "3 × 10⁴ m/s"],
+                    correct: 0
+                },
+                {
+                    question: "What is the efficiency formula for a machine?",
+                    options: ["Input/Output", "Output/Input", "Input × Output", "Input + Output"],
+                    correct: 1
+                },
+                {
+                    question: "What type of signal is used in digital systems?",
+                    options: ["Continuous", "Discrete", "Analog", "Sinusoidal"],
+                    correct: 1
+                }
+            ],
+            general: [
+                {
+                    question: "What is the capital of India?",
+                    options: ["Mumbai", "New Delhi", "Kolkata", "Chennai"],
+                    correct: 1
+                },
+                {
+                    question: "Who invented the World Wide Web?",
+                    options: ["Bill Gates", "Tim Berners-Lee", "Steve Jobs", "Mark Zuckerberg"],
+                    correct: 1
+                },
+                {
+                    question: "What is the largest planet in our solar system?",
+                    options: ["Earth", "Saturn", "Jupiter", "Neptune"],
+                    correct: 2
+                },
+                {
+                    question: "In which year did India gain independence?",
+                    options: ["1945", "1947", "1948", "1950"],
+                    correct: 1
+                },
+                {
+                    question: "What is the chemical symbol for gold?",
+                    options: ["Go", "Gd", "Au", "Ag"],
+                    correct: 2
+                },
+                {
+                    question: "Which programming language is known as the 'mother of all languages'?",
+                    options: ["C", "Java", "Python", "Assembly"],
+                    correct: 0
+                },
+                {
+                    question: "What does CPU stand for?",
+                    options: ["Computer Processing Unit", "Central Processing Unit", "Core Processing Unit", "Central Program Unit"],
+                    correct: 1
+                },
+                {
+                    question: "Which company developed the Android operating system?",
+                    options: ["Apple", "Microsoft", "Google", "Samsung"],
+                    correct: 2
+                },
+                {
+                    question: "What is the binary equivalent of decimal 10?",
+                    options: ["1010", "1100", "1001", "1110"],
+                    correct: 0
+                },
+                {
+                    question: "Which data structure follows First In First Out (FIFO)?",
+                    options: ["Stack", "Queue", "Tree", "Graph"],
+                    correct: 1
+                }
+            ]
+        };
+
+        // Initialize game
+        function initGame() {
+            updateStatsDisplay();
+            createParticles();
+            
+            // Add some initial animations
+            setTimeout(() => {
+                document.querySelectorAll('.stat-card').forEach((card, index) => {
+                    setTimeout(() => {
+                        card.style.transform = 'translateY(0)';
+                        card.style.opacity = '1';
+                    }, index * 100);
+                });
+            }, 500);
+        }
+
+        function createParticles() {
+            const particles = document.getElementById('particles');
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.width = Math.random() * 4 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particles.appendChild(particle);
+            }
+        }
+
+        function updateStatsDisplay() {
+            document.getElementById('totalScore').textContent = gameStats.totalScore;
+            document.getElementById('gamesPlayed').textContent = gameStats.gamesPlayed;
+            const accuracy = gameStats.totalQuestions > 0 ? 
+                Math.round((gameStats.totalCorrect / gameStats.totalQuestions) * 100) : 0;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+            document.getElementById('streak').textContent = gameStats.streak;
+        }
+
+        function saveStats() {
+            localStorage.setItem('totalScore', gameStats.totalScore.toString());
+            localStorage.setItem('gamesPlayed', gameStats.gamesPlayed.toString());
+            localStorage.setItem('totalCorrect', gameStats.totalCorrect.toString());
+            localStorage.setItem('totalQuestions', gameStats.totalQuestions.toString());
+            localStorage.setItem('streak', gameStats.streak.toString());
+        }
+
+        function startQuiz(category) {
+            currentQuiz = {
+                category: category,
+                questions: [...questionBanks[category]].sort(() => Math.random() - 0.5).slice(0, 10),
+                currentQuestion: 0,
+                score: 0,
+                startTime: Date.now()
+            };
+
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = [];
+            responseTimes = [];
+
+            document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById('quizContainer').style.display = 'block';
+            document.getElementById('resultsScreen').style.display = 'none';
+
+            document.getElementById('currentCategory').textContent = 
+                category.charAt(0).toUpperCase() + category.slice(1) + ' Challenge';
+
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = currentQuiz.questions[currentQuestionIndex];
+            const questionText = document.getElementById('questionText');
+            const optionsGrid = document.getElementById('optionsGrid');
+            const questionCounter = document.getElementById('questionCounter');
+            const progressFill = document.getElementById('progressFill');
+
+            // Update progress
+            questionCounter.textContent = `${currentQuestionIndex + 1} / ${currentQuiz.questions.length}`;
+            const progress = ((currentQuestionIndex + 1) / currentQuiz.questions.length) * 100;
+            progressFill.style.width = progress + '%';
+
+            // Display question with typewriter effect
+            questionText.textContent = '';
+            let i = 0;
+            const typeWriter = () => {
+                if (i < question.question.length) {
+                    questionText.textContent += question.question.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 30);
+                }
+            };
+            typeWriter();
+
+            // Display options
+            optionsGrid.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectAnswer(index);
+                optionsGrid.appendChild(optionDiv);
+                
+                // Animate options
+                setTimeout(() => {
+                    optionDiv.style.transform = 'translateX(0)';
+                    optionDiv.style.opacity = '1';
+                }, index * 100 + 500);
+            });
+
+            // Start timer
+            timeLeft = 30;
+            questionStartTime = Date.now();
+            startTimer();
+        }
+
+        function startTimer() {
+            const timerElement = document.getElementById('timer');
+            
+            timer = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = timeLeft + 's';
+                
+                if (timeLeft <= 10) {
+                    timerElement.style.color = 'var(--error-color)';
+                    timerElement.style.animation = 'pulse 1s infinite';
+                } else {
+                    timerElement.style.color = 'var(--primary-text)';
+                    timerElement.style.animation = 'none';
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    selectAnswer(-1); // Time's up
+                }
+            }, 1000);
+        }
+
+        function selectAnswer(selectedIndex) {
+            clearInterval(timer);
+            
+            const question = currentQuiz.questions[currentQuestionIndex];
+            const options = document.querySelectorAll('.option');
+            const responseTime = Date.now() - questionStartTime;
+            responseTimes.push(responseTime);
+
+            // Disable all options
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+
+            // Show correct/incorrect
+            if (selectedIndex === question.correct) {
+                options[selectedIndex].classList.add('correct');
+                score += 100;
+                userAnswers.push(true);
+                createCelebration();
+            } else {
+                if (selectedIndex >= 0) {
+                    options[selectedIndex].classList.add('incorrect');
+                }
+                options[question.correct].classList.add('correct');
+                userAnswers.push(false);
+            }
+
+            // Show next question after delay
+            setTimeout(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < currentQuiz.questions.length) {
+                    showQuestion();
+                } else {
+                    showResults();
+                }
+            }, 2000);
+        }
+
+        function createCelebration() {
+            const colors = ['var(--accent-text)', 'var(--success-color)', 'var(--purple-glow)'];
+            
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 3000);
+                }, i * 50);
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('resultsScreen').style.display = 'block';
+
+            const correctAnswers = userAnswers.filter(answer => answer).length;
+            const incorrectAnswers = userAnswers.length - correctAnswers;
+            const avgTime = Math.round(responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length / 1000);
+
+            // Update display
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('correctAnswers').textContent = correctAnswers;
+            document.getElementById('incorrectAnswers').textContent = incorrectAnswers;
+            document.getElementById('avgTime').textContent = avgTime + 's';
+
+            // Update stats
+            gameStats.totalScore += score;
+            gameStats.gamesPlayed++;
+            gameStats.totalCorrect += correctAnswers;
+            gameStats.totalQuestions += userAnswers.length;
+            
+            const percentage = (correctAnswers / userAnswers.length) * 100;
+            if (percentage >= 70) {
+                gameStats.streak++;
+            } else {
+                gameStats.streak = 0;
+            }
+
+            saveStats();
+
+            // Performance message
+            const messageElement = document.getElementById('performanceMessage');
+            if (percentage >= 90) {
+                messageElement.innerHTML = '🏆 Outstanding! You\'re a true scholar!';
+                messageElement.style.color = 'var(--success-color)';
+                createMassiveCelebration();
+            } else if (percentage >= 70) {
+                messageElement.innerHTML = '🎉 Great job! Keep up the excellent work!';
+                messageElement.style.color = 'var(--accent-text)';
+            } else if (percentage >= 50) {
+                messageElement.innerHTML = '👍 Good effort! Practice makes perfect!';
+                messageElement.style.color = 'var(--warning-color)';
+            } else {
+                messageElement.innerHTML = '💪 Don\'t give up! Review and try again!';
+                messageElement.style.color = 'var(--error-color)';
+            }
+
+            updateStatsDisplay();
+        }
+
+        function createMassiveCelebration() {
+            const colors = ['var(--accent-text)', 'var(--success-color)', 'var(--purple-glow)', 'var(--warning-color)'];
+            
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 1 + 's';
+                    confetti.style.width = Math.random() * 15 + 5 + 'px';
+                    confetti.style.height = confetti.style.width;
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 4000);
+                }, i * 30);
+            }
+        }
+
+        function restartQuiz() {
+            startQuiz(currentQuiz.category);
+        }
+
+        function goHome() {
+            document.getElementById('mainMenu').style.display = 'block';
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('resultsScreen').style.display = 'none';
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('quizContainer').style.display === 'block') {
+                if (e.key >= '1' && e.key <= '4') {
+                    const index = parseInt(e.key) - 1;
+                    const options = document.querySelectorAll('.option');
+                    if (options[index] && options[index].style.pointerEvents !== 'none') {
+                        selectAnswer(index);
+                    }
+                }
+            }
+        });
+
+        // Add pulse animation to stats
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+                100% { transform: scale(1); }
+            }
+            
+            .stat-card:hover .stat-value {
+                animation: pulse 0.6s ease;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', initGame);
+
+        // Add some easter eggs
+        let clickCount = 0;
+        document.querySelector('.game-title').addEventListener('click', () => {
+            clickCount++;
+            if (clickCount === 5) {
+                alert('🎉 Easter Egg! You found the secret click counter! Here\'s a bonus: The best way to learn is to teach others! 🚀');
+                gameStats.totalScore += 50;
+                updateStatsDisplay();
+                saveStats();
+                clickCount = 0;
+            }
+        });
+
+        // Add motivational quotes
+        const motivationalQuotes = [
+            "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+            "The expert in anything was once a beginner.",
+            "Education is the most powerful weapon which you can use to change the world.",
+            "The beautiful thing about learning is that no one can take it away from you.",
+            "Success is where preparation and opportunity meet."
+        ];
+
+        // Show random motivational quote every minute
+        setInterval(() => {
+            if (document.getElementById('mainMenu').style.display !== 'none') {
+                const quote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
+                
+                // Create floating quote
+                const quoteElement = document.createElement('div');
+                quoteElement.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: var(--glass-bg);
+                    backdrop-filter: blur(20px);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 15px;
+                    padding: 1rem;
+                    max-width: 300px;
+                    color: var(--primary-text);
+                    font-size: 0.9rem;
+                    z-index: 1000;
+                    animation: slideIn 0.5s ease, slideOut 0.5s ease 4.5s forwards;
+                `;
+                quoteElement.innerHTML = `💡 ${quote}`;
+                
+                document.body.appendChild(quoteElement);
+                
+                setTimeout(() => {
+                    quoteElement.remove();
+                }, 5000);
+            }
+        }, 60000);
+
+        // Add slide animations
+        const slideStyle = document.createElement('style');
+        slideStyle.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(slideStyle);
+    </script>
+</body>
+</html>
